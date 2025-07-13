@@ -1,0 +1,28 @@
+
+## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+## This is the LDAP Friendly CIS script ##
+## CIS Harden with this deploy script   ##
+##                             2025-07  ##
+## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+
+# Current tarball file name: 
+# deploy-cis-lvl1-hardening-v1.3.tar.gz
+#
+# (Actually it's a gzipped tarball file, but who's gonna argue?)
+#
+# as sysadmin:
+# place a copy tarball file on the destination server
+#
+# as root (staying in ~root/ directory:
+# mv tarball file .
+# tar zxvf tarball file
+#
+# cd deploy-cis-lvl1-hardening
+# ./deploy-cis-lvl1-script-v1.3.sh
+#
+# once completed the server will be tested against CIS Benchmark.
+# The CIS Benchmark score should hit 70% and over.
+# Refer to the handbook for the manual items such as /etc/fstab and aide installation
+# With the manaul tasks completed, you should see a higher CIS pass mark.
+
+## done

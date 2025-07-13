@@ -1,0 +1,95 @@
+
+## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+## This handbook will list the manual changes needed to be made in   ##
+## order to complete the minimum requirements for CIS Hardening      ##
+## within the environment. Validate using Wazuh Server.              ##
+##                                                        July 2025  ##
+## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
+
+
+## Understanding what this deployment is and how it was created
+##
+## The information and scripts within the deployment were built using
+## wazuh scans to identify the requirements to achieve a minimum of 70%
+## evaluation. This is a strong result for a production server.
+
+## You can duplicate all the work done here using the results from a wazuh scan.
+## The scripts layout was designed to allow curated values to be pushed. Any
+## file with a .deploy extension will replace the current system file with a
+## hardened version. The substitutions are both straight swapped out files or
+## edited (concatenated).
+
+## Handbook Item 01 - fstab
+## For obvious (maybe not so obvious in some cases) reasons
+## we try not to touch critical systems with bash scripting.
+## /etc/fstab is one of them
+## edit /etc/fstab and make the following changes
+
+## (the first two hash marks "##" are to be ignored. Its for
+## document presentation and to make sure this file cannot
+## accidentally be run by making it executable)
+
+## change the default mount values for /home
+## /home ext4 defaults 0 1
+## to
+## /home ext4 rw,suid,nodev,exec,auto,nouser,async 0 1
+
+## change the default mount values for /var/tmp
+## /var/tmp ext4 defaults 0 1
+## to
+## /var/tmp ext4 rw,nodev,nosuid,noexec 0 1
+
+## Add tmpfs values if they are not already there
+
+## # CIS Security for /tmp
+## # removed noexec from /tmp
+## tmpfs /tmp tmpfs defaults,rw,nosuid,nodev,noexec,relatime 0 0
+## tmpfs /dev/shm tmpfs nosuid,nodev,noexec 0 0
+
+## End of Item 01
+
+## Handbook Item 02 - install and initialize aide
+
+## apt install aide -y
+## aideinit     # takes 10 or more minutes to generate 
+## 		# the initial database of filesystem state
+
+## Next we need to adad the cronjob to monitor it
+## crontab to check on aide -- manual entry as root (crontab -u root -e)
+## 0 5 * * * /usr/bin/aide.wrapper --config /etc/aide/aide.conf --check
+
+## End of Item 02
+
+## Handbook Item 03 - sshd_config manual changes
+
+## edit /etc/ssh/sshd_config and set the following entries
+
+## LoginGraceTime 60
+
+## PermitRootLogin no
+
+## MaxAuthTries 4
+
+## ClientAliveInterval 300
+
+## End of Item 03
+
+## Handbook Item 04 - disable motd-news, enable ssh banner
+
+## chmod -x /etc/update-motd.d/*
+
+## edit /etc/ssh/sshd_config set
+
+## Banner /etc/issue.net
+
+## End of Item 04
+
+## Handbook Item 05 - cron job for aide
+
+## crontab -u root -e
+
+## # 5am Sunday run aide check
+## 0 5 * * 0 /usr/bin/aide --config /etc/aide/aide.conf --check
+
+## End of Item 05
+

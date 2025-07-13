@@ -1,0 +1,4 @@
+Defaults logfile="/var/log/sudo.log"
+
+#Members of sysadmin group
+%sysadmin ALL=(ALL:ALL) ALL

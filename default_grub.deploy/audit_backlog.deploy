@@ -1,0 +1,3 @@
+## CIS Hardening
+GRUB_CMDLINE_LINUX="audit_backlog_limit=8192"
+
